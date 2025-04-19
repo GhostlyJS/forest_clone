@@ -10,3 +10,6 @@ const treeSchema = new mongoose.Schema({
         required: true,
     },
 })
+
+const Tree = mongoose.model('Tree', treeSchema);
+module.exports = Tree;
