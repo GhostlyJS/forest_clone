@@ -27,8 +27,8 @@ export default function Forest() {
                 <p>Room Code :</p>
                 <input type="text" className="mx-4 border" onChange={(e) => setRoomId(e.target.value)}/>
             </div>}
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Forest</h1>
-            <p className="text-lg text-gray-700 dark:text-gray-300">Welcome to the Forest page!</p>
+            <h1 className="text-3xl font-bold text-white">Forest</h1>
+            <p className="text-lg text-gray-300">Welcome to the Forest page!</p>
             <div className="w-64 h-64 rounded-full my-6 bg-gray-300">
 
             </div>

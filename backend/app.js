@@ -6,9 +6,12 @@ const dotenv = require('dotenv');
 const {Server} = require('socket.io');
 const { createServer } = require('http');
 const httpServer = createServer(app);
+const jsonwebsocket = require('jsonwebtoken');
+const Session = require('./models/session.model');
+
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "http://localhost:5173",
         methods: ["GET", "POST"]
     }
 });
@@ -34,12 +37,31 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Client disconnected:', socket.id);
     });
+
+    socket.on('connectToRoom', async (room, token) => {
+        const decodedToken = jsonwebsocket.verify(token, "forest");
+        if (!decodedToken) {
+            console.error('Invalid token:', token);
+            return;
+        }
+        const userId = decodedToken.id;
+        const thisSession = await Session.findOne({ _id: room });
+        if (!thisSession) {
+            console.error('Session not found:', room);
+            return;
+        }
+        if (!thisSession.userId.includes(userId)) {
+            console.error('User not authorized for this session:', userId);
+            socket.emit('userNotAllowed');
+            return;
+        }
+        socket.join(room);
+    });
 });
 
 app.use('/api/users', userRouter);
 app.use('/api/sessions', sessionRouter);
 
-
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+httpServer.listen(5000, () => {
+    console.log(`Socket.IO server is running on port ${5000}`);
 });

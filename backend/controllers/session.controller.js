@@ -5,7 +5,7 @@ module.exports = {
     async createSession(req, res) {
         try {
             const { treeId, duration } = req.body;
-            const userId = req.user._id; // Assuming you have user ID from the request context
+            const userId = req.user.id; // Assuming you have user ID from the request context
             /* const tree = await Tree.findById(treeId);
             if (!tree) {
                 return res.status(404).json({ message: 'Tree not found' });
