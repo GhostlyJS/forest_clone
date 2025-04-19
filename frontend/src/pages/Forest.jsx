@@ -25,7 +25,7 @@ export default function Forest() {
             </select>
             <div className="mt-3 flex space-x-4">
                 <button className="bg-green-700 px-4 py-1.5 text-white rounded">Create Room</button>
-                <button className="bg-gray-700 px-4 py-1 text-white rounded" onClick={(e) => setRoomModal(!roomModal)}>Join Room</button>
+                <button className="bg-gray-700 px-4 py-1.5 text-white rounded" onClick={(e) => setRoomModal(!roomModal)}>Join Room</button>
             </div>
         </div>
     );
