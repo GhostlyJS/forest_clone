@@ -22,6 +22,10 @@ const sessionSchema = new mongoose.Schema({
         enum: ['not-started', 'started', 'done'],
         default: 'not-started',
     },
+    time: {
+        type: Number,
+        required: true,
+    },
 });
 
 module.exports = mongoose.model('Session', sessionSchema);

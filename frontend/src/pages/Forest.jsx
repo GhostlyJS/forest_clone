@@ -6,6 +6,21 @@ export default function Forest() {
     const [roomId, setRoomId] = useState("");
     const [roomModal, setRoomModal] = useState(false);
 
+    function createSession() {
+        axios.post("http://localhost:5000/api/sessions/create",
+            { duration: timer },
+            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        )
+            .then((res) => {
+                if (res.status === 201) {
+                    window.location.href = `/forest/${res.data.session._id}`;
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     return (
         <div className="relative flex flex-col gap-4 items-center justify-center min-h-screen bg-gray-900 w-2xl border-2">
             {roomModal && <div className="absolute flex items-center top-0 left-0 w-full bg-gray-600 h-10 px-4">
@@ -24,7 +39,7 @@ export default function Forest() {
                 <option value="120">120</option>
             </select>
             <div className="mt-3 flex space-x-4">
-                <button className="bg-green-700 px-4 py-1.5 text-white rounded">Create Room</button>
+                <button className="bg-green-700 px-4 py-1.5 text-white rounded" onClick={(e) => createSession()} >Create Room</button>
                 <button className="bg-gray-700 px-4 py-1.5 text-white rounded" onClick={(e) => setRoomModal(!roomModal)}>Join Room</button>
             </div>
         </div>

@@ -28,7 +28,7 @@ module.exports = {
             if (!isMatch) {
                 return res.status(401).json({ message: 'Invalid username or password' });
             }
-            const token = jsonwebtoken.sign({ id: user._id }, "forest", { expiresIn: '1h' });
+            const token = jsonwebtoken.sign({ id: user._id }, "forest");
             return res.status(200).json({ token });
         } catch (error) {
             console.error(error);

@@ -2,6 +2,7 @@ import {createBrowserRouter, RouterProvider} from "react-router";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Forest from "./pages/Forest";
+import ForestSession from "./pages/ForestSession";
 import Template from "./Outlet";
 
 let router = createBrowserRouter([
@@ -20,6 +21,10 @@ let router = createBrowserRouter([
             {
                 path : "",
                 Component : Forest
+            },
+            {
+                path : ":sessionId",
+                Component : ForestSession
             }
         ]
     }

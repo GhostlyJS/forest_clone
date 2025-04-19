@@ -14,6 +14,7 @@ const io = new Server(httpServer, {
 });
 
 const userRouter = require('./router/user.route');
+const sessionRouter = require('./router/session.route');
 
 app.use(cors());
 app.use(express.json());
@@ -36,6 +37,8 @@ io.on('connection', (socket) => {
 });
 
 app.use('/api/users', userRouter);
+app.use('/api/sessions', sessionRouter);
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
