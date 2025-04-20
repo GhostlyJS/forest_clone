@@ -24,12 +24,30 @@ module.exports = {
     },
     async getSession(req, res) {
         try {
-            const userId = req.user._id; // Assuming you have user ID from the request context
             const { sessionId } = req.params;
-            const sessions = await sessionSchema.findOne({ userId }).populate('tree');
+            const sessions = await sessionSchema.findOne({ _id : sessionId }).populate('tree');
             res.status(200).json(sessions);
         } catch (error) {
             console.error('Error fetching sessions:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+    async joinSession(req, res) {
+        try {
+            const { sessionId } = req.params;
+            const userId = req.user.id; // Assuming you have user ID from the request context
+            const session = await sessionSchema.findById(sessionId);
+            if (!session) {
+                return res.status(404).json({ message: 'Session not found' });
+            }
+            if (session.userId.includes(userId)) {
+                return res.status(400).json({ message: 'User already in session' });
+            }
+            session.userId.push(userId);
+            await session.save();
+            res.status(200).json({ message: 'Joined session successfully', session });
+        } catch (error) {
+            console.error('Error joining session:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     },

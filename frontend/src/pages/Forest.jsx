@@ -21,11 +21,26 @@ export default function Forest() {
             });
     }
 
+    function joinSession() {
+        axios.post(`http://localhost:5000/api/sessions/join/${roomId}`, {}, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    window.location.href = `/forest/${roomId}`;
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     return (
         <div className="relative flex flex-col gap-4 items-center justify-center min-h-screen bg-gray-900 w-2xl border-2">
             {roomModal && <div className="absolute flex items-center top-0 left-0 w-full bg-gray-600 h-10 px-4">
                 <p>Room Code :</p>
                 <input type="text" className="mx-4 border" onChange={(e) => setRoomId(e.target.value)}/>
+                <button onClick={joinSession} className="bg-gray-700 px-4 py-1.5 text-white rounded">Join Room</button>
             </div>}
             <h1 className="text-3xl font-bold text-white">Forest</h1>
             <p className="text-lg text-gray-300">Welcome to the Forest page!</p>

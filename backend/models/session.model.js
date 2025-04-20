@@ -9,6 +9,10 @@ const sessionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    startedAt: {
+        type: Date,
+        default: null,
+    },
     endAt : {
         type: Date,
         default: null,
