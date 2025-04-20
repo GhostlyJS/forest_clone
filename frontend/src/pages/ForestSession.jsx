@@ -11,7 +11,7 @@ export default function ForestSession() {
     const [timing, setTiming] = useState("00:00");
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/sessions/${sessionId}`, {
+        axios.get(`http://176.133.252.124:5000/api/sessions/${sessionId}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         })
         .then((res) => {
@@ -55,6 +55,12 @@ export default function ForestSession() {
             socket.disconnect();
         };
     }, [sessionId]);
+
+    useEffect(() => {
+        if (!localStorage.getItem("token")) {
+            window.location.href = "/login";
+        }
+    }, []);
 
     function startSession() {
         socket.emit("startSession", sessionId);

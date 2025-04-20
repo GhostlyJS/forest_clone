@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Forest() {
@@ -6,8 +6,14 @@ export default function Forest() {
     const [roomId, setRoomId] = useState("");
     const [roomModal, setRoomModal] = useState(false);
 
+    useEffect(() => {
+        if (!localStorage.getItem("token")) {
+            window.location.href = "/login";
+        }
+    }, []);
+
     function createSession() {
-        axios.post("http://localhost:5000/api/sessions/create",
+        axios.post("http://176.133.252.124:5000/api/sessions/create",
             { duration: timer },
             { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
         )
@@ -22,7 +28,7 @@ export default function Forest() {
     }
 
     function joinSession() {
-        axios.post(`http://localhost:5000/api/sessions/join/${roomId}`, {}, {
+        axios.post(`http://176.133.252.124:5000/api/sessions/join/${roomId}`, {}, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         })
             .then((res) => {

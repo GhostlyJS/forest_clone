@@ -20,7 +20,7 @@ export default function Register() {
 
     function handleSubmit(e) {
         e.preventDefault()
-        axios.post("http://localhost:5000/api/users/register", user)
+        axios.post("http://176.133.252.124:5000/api/users/register", user)
             .then(res => {
                 if (res.status === 201) {
                     console.log(res.data)

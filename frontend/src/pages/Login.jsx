@@ -18,7 +18,7 @@ export default function Login() {
     async function handleSubmit(e) {
         e.preventDefault()
         try {
-            const response = await axios.post("http://localhost:5000/api/users/login", user)
+            const response = await axios.post("http://176.133.252.124:5000/api/users/login", user)
             console.log(response.data)
             if (response.status === 200) {
                 localStorage.setItem("token", response.data.token)
