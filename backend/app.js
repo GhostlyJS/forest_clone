@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
             if (session.endAt <= currentTime) {
                 session.status = 'done';
                 session.save().then(() => {
-                    io.to(session._id).emit('sessionEnded', session._id);
+                    io.to(session._id.toJSON()).emit('sessionEnded', session._id);
                 });
             }
             else {
