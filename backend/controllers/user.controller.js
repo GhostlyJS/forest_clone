@@ -63,7 +63,6 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({ message: 'User not found' });
             }
-            console.log(req.file); // Log the file object to see if it's being received correctly
             user.profilePicture = req.file.path; // Assuming you are using multer for file uploads
             await user.save();
             return res.status(200).json({ message: 'Profile picture updated successfully' });
