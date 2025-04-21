@@ -55,7 +55,10 @@ io.on('connection', (socket) => {
             socket.emit('userNotAllowed');
             return;
         }
-        await socket.join(room);
+        socket.join(room);
+        var userAmount = thisSession.userId.length;
+        console.log('User amount:', userAmount);
+        socket.to(room).emit('userConnect', userAmount);
     });
 
     socket.on('startSession', async (room) => {
