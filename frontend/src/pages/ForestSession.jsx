@@ -87,11 +87,35 @@ export default function ForestSession() {
     function copySessionId(e) {
         e.preventDefault();
         e.stopPropagation();
-        navigator.clipboard.writeText(sessionId).then(() => {
-            alert("Session ID copied to clipboard !");
-        }).catch(err => {
-            console.error("Failed to copy session ID: ", err);
-        });
+    
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            // Modern Clipboard API
+            navigator.clipboard.writeText(sessionId)
+                .then(() => alert("Session ID copied to clipboard!"))
+                .catch((err) => alert("Failed to copy Session ID: " + err));
+        } else {
+            // Fallback for older browsers
+            const textArea = document.createElement("textarea");
+            textArea.value = sessionId;
+            textArea.style.position = "fixed"; // Avoid scrolling to bottom
+            textArea.style.opacity = "0"; // Hide the textarea
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+    
+            try {
+                const successful = document.execCommand("copy");
+                if (successful) {
+                    alert("Session ID copied to clipboard!");
+                } else {
+                    alert("Failed to copy Session ID.");
+                }
+            } catch (err) {
+                alert("Failed to copy Session ID: " + err);
+            }
+    
+            document.body.removeChild(textArea);
+        }
     }
 
 
@@ -107,9 +131,9 @@ export default function ForestSession() {
             <div className="w-64 h-64 rounded-full my-6 bg-gray-300">
 
             </div>
-            <p className="text-lg text-gray-300" onClick={copySessionId}>
+            <span className="text-lg text-gray-300" onClick={(e) => copySessionId(e)}>
                 Session : {sessionId}
-            </p>
+            </span>
             {!isStarted && <p className="text-white text-2xl font-semibold">{tempTiming}:00</p>}
             {!isStarted && <button className="mt-4 bg-gray-700 px-4 py-1.5 text-white rounded" onClick={startSession}>Start the session</button>}
             {isStarted && <p className="text-white text-2xl font-semibold">{timing}</p>}
