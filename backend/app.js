@@ -8,6 +8,7 @@ const { createServer } = require('http');
 const httpServer = createServer(app);
 const jsonwebsocket = require('jsonwebtoken');
 const Session = require('./models/session.model');
+const User = require('./models/user.model');
 
 const io = new Server(httpServer, {
     cors: {
@@ -24,14 +25,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
-app.use('/image', express.static('image'));
 app.use('/profilepicture', express.static('profilePicture'));
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/forest_app';
 
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 
@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
             return;
         }
         const userId = decodedToken.id;
-        const thisSession = await Session.findOne({ _id: room });
+        const thisSession = await Session.findOne({ _id: room });;
         if (!thisSession) {
             console.error('Session not found:', room);
             return;
@@ -59,9 +59,14 @@ io.on('connection', (socket) => {
             socket.emit('userNotAllowed');
             return;
         }
+        const sessionPopulated = await Session.findOne({ _id: room }).populate('userId', 'username profilePicture');
+        if (!sessionPopulated) {
+            console.error('Session not found:', room);
+            return;
+        }
+        socket.emit('userConnect', sessionPopulated.userId);
+        socket.to(room).emit('userConnect', sessionPopulated.userId);
         socket.join(room);
-        var userAmount = thisSession.userId.length;
-        socket.to(room).emit('userConnect', userAmount);
     });
 
     socket.on('startSession', async (room) => {
@@ -70,6 +75,7 @@ io.on('connection', (socket) => {
             console.error('Session not found:', room);
             return;
         }
+        console.log('Session found:', thisSession);
         thisSession.status = 'started';
         thisSession.startedAt = new Date();
         thisSession.endAt = new Date(Date.now() + thisSession.time * 60000);

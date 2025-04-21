@@ -52,4 +52,24 @@ module.exports = {
             return res.status(500).json({ message: 'Internal server error' });
         }
     },
+    updateProfilePicture: async (req, res) => {
+        try {
+            const token = req.headers['authorization'].split(' ')[1];
+            const decodedToken = jsonwebtoken.verify(token, "forest");
+            if (!decodedToken) {
+                return res.status(401).json({ message: 'Unauthorized' });
+            }
+            const user = await User.findById(decodedToken.id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            console.log(req.file); // Log the file object to see if it's being received correctly
+            user.profilePicture = req.file.path; // Assuming you are using multer for file uploads
+            await user.save();
+            return res.status(200).json({ message: 'Profile picture updated successfully' });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    },
 }

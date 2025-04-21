@@ -25,7 +25,7 @@ module.exports = {
     async getSession(req, res) {
         try {
             const { sessionId } = req.params;
-            const sessions = await sessionSchema.findOne({ _id : sessionId }).populate('tree');
+            const sessions = await sessionSchema.findOne({ _id : sessionId }).populate('tree').populate('userId', 'username profilePicture');
             res.status(200).json(sessions);
         } catch (error) {
             console.error('Error fetching sessions:', error);

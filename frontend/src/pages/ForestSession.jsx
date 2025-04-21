@@ -9,7 +9,7 @@ export default function ForestSession() {
     const [isEnded, setIsEnded] = useState(false);
     const [tempTiming, setTempTiming] = useState(0);
     const [timing, setTiming] = useState("00:00");
-    const [userAmount, setUserAmount] = useState(0);
+    const [users, setUsers] = useState([]);
 
     const colors = [
         "bg-sky-300",
@@ -27,9 +27,8 @@ export default function ForestSession() {
         })
         .then((res) => {
             if (res.status === 200) {
-                console.log(res.data);
                 setTempTiming(res.data.time);
-                setUserAmount(res.data.userId.length);
+                console.log(res.data.userId);
                 if (res.data.status === "started") {
                     setIsStarted(true);
                 }
@@ -47,9 +46,8 @@ export default function ForestSession() {
         socket.on("connect", () => {
             socket.emit("connectToRoom", sessionId, localStorage.getItem("token"));
 
-            socket.on("userConnect", (userAmount) => {
-                setUserAmount(userAmount);
-                console.log(userAmount);
+            socket.on("userConnect", (user) => {
+                setUsers(user);
             });
 
             socket.on("userNotAllowed", () => {
@@ -122,13 +120,15 @@ export default function ForestSession() {
     return (
         <div className="relative flex flex-col gap-4 items-center justify-center min-h-screen bg-gray-900 w-2xl border-2">
             <div className="flex mb-4 gap-3 items-center justify-center">
-                {Array.from({length: userAmount}, (_, i) => (
-                    <div key={i} className={`w-12 h-12 rounded-full ${colors[i % colors.length]}`}></div>
+                {users.map((user, index) => (
+                    <div key={index} className={`w-12 h-12 rounded-full ${colors[index % colors.length]} flex items-center justify-center`}>
+                        <img src={"http://176.133.252.124:5000/"+user.profilePicture} alt="User" className="w-full h-full rounded-full" />
+                    </div>
                 ))}
             </div>
             <h1 className="text-3xl font-bold text-white">Forest</h1>
             <p className="text-lg text-gray-300">Welcome to the Forest session !</p>
-            <div className="w-64 h-64 rounded-full my-6 bg-gray-300">
+            <div className="w-64 h-64 rounded-full my-6 bg-gray-300" onClick={() => console.log(users)}>
 
             </div>
             <span className="text-lg text-gray-300" onClick={(e) => copySessionId(e)}>
