@@ -23,6 +23,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static('public'));
+app.use('/image', express.static('image'));
+app.use('/profilepicture', express.static('profilePicture'));
+
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/forest_app';
@@ -57,7 +61,6 @@ io.on('connection', (socket) => {
         }
         socket.join(room);
         var userAmount = thisSession.userId.length;
-        console.log('User amount:', userAmount);
         socket.to(room).emit('userConnect', userAmount);
     });
 

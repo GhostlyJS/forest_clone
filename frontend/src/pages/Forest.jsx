@@ -5,11 +5,25 @@ export default function Forest() {
     const [timer, setTimer] = useState(30);
     const [roomId, setRoomId] = useState("");
     const [roomModal, setRoomModal] = useState(false);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         if (!localStorage.getItem("token")) {
             window.location.href = "/login";
+            return;
         }
+        axios.get("http://176.133.252.124:5000/api/users/getuser", {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        })
+            .then((res) => {
+                if (res.status === 200) {
+                    console.log(res.data);
+                    setUser(res.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
 
     function createSession() {
@@ -48,6 +62,9 @@ export default function Forest() {
                 <input type="text" className="mx-4 border" onChange={(e) => setRoomId(e.target.value)}/>
                 <button onClick={joinSession} className="bg-gray-700 px-4 py-1.5 text-white rounded">Join Room</button>
             </div>}
+            <div className="absolute flex items-center top-6 right-6 w-12 h-12">
+                <img src={"http://176.133.252.124:5000/profilepicture/"+user.profilePicture} alt="Profile" className="h-full w-full rounded-full" />
+            </div>
             <h1 className="text-3xl font-bold text-white">Forest</h1>
             <p className="text-lg text-gray-300">Welcome to the Forest page!</p>
             <div className="w-64 h-64 rounded-full my-6 bg-gray-300">

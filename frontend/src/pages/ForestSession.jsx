@@ -123,7 +123,7 @@ export default function ForestSession() {
         <div className="relative flex flex-col gap-4 items-center justify-center min-h-screen bg-gray-900 w-2xl border-2">
             <div className="flex mb-4 gap-3 items-center justify-center">
                 {Array.from({length: userAmount}, (_, i) => (
-                    <div key={i} className={`w-10 h-10 rounded-full ${colors[i % colors.length]}`}></div>
+                    <div key={i} className={`w-12 h-12 rounded-full ${colors[i % colors.length]}`}></div>
                 ))}
             </div>
             <h1 className="text-3xl font-bold text-white">Forest</h1>
