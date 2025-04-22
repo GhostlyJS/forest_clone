@@ -128,6 +128,15 @@ export default function ForestSession() {
         transform: rotate(360deg);
       }
     }
+
+    @keyframes spin-full-reverse {
+        from {
+            transform: rotate(360deg);
+        }
+        to {
+            transform: rotate(0deg);
+        }
+    }
   `;
 
     return (
@@ -141,20 +150,21 @@ export default function ForestSession() {
             </div>
             <h1 className="text-3xl font-bold text-white">Forest</h1>
             <p className="text-lg text-gray-300">Welcome to the Forest session !</p>
-            <div className="w-64 h-64 rounded-full my-6 bg-gray-300">
+            {isStarted && <div className="w-64 h-64 rounded-full my-6 bg-gray-300">
                 <style>{keyframesStyle}</style>
                 <div className="relative w-full h-full margin-auto overflow-hidden rounded-full">
-                    <div className="absolute left-[-25%] bg-[#33cfff] opacity-40 w-[200%] h-[200%] rounded-[40%]" style={{ animation: "spin-full 6s linear infinite" , top: `${progress + 10}%`}}>
+                    <div className="absolute left-[-25%] bg-[#33cfff] opacity-40 w-[200%] h-[200%] rounded-[40%]" style={{ animation: "spin-full 4s linear infinite" , top: `${progress + 10}%`}}>
 
                     </div>
-                    <div className="absolute left-[-25%] bg-[#0eaffe] opacity-35 w-[200%] h-[200%] rounded-[35%]" style={{ animation: "spin-full 8s linear infinite" , top: `${progress + 5}%`}}>
+                    <div className="absolute left-[-25%] bg-[#0eaffe] opacity-35 w-[200%] h-[200%] rounded-[35%]" style={{ animation: "spin-full 7s linear infinite" , top: `${progress + 5}%`}}>
 
                     </div>
                     <div className="absolute left-[-25%] bg-[#0f7ae4] opacity-30 w-[200%] h-[200%] rounded-[33%]" style={{ animation: "spin-full 10s linear infinite", top: `${progress}%` }}>
 
                     </div>
                 </div>
-            </div>
+            </div>}
+            {!isStarted && <div className="w-64 h-64 rounded-full my-6 bg-gray-300"></div>}
             <span className="text-lg text-gray-300" onClick={(e) => copySessionId(e)}>
                 Session : {sessionId}
             </span>
