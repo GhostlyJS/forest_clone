@@ -102,8 +102,9 @@ io.on('connection', (socket) => {
                 const timeLeft = Math.floor((session.endAt - currentTime) / 1000);
                 let minutes = Math.floor(timeLeft / 60);
                 let seconds = timeLeft % 60;
+                let percentage = Math.floor((timeLeft / (session.time * 60)) * 100);
                 let timer = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                socket.to(session._id.toJSON()).emit('sessionTimer', timer);
+                socket.to(session._id.toJSON()).emit('sessionTimer', timer, percentage);
             }
         });
     }, 1000);
